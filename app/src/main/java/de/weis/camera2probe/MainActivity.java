@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.webkit.WebView;
@@ -137,10 +138,15 @@ public class MainActivity extends AppCompatActivity {
         levels.add(new Pair<>(INFO_SUPPORTED_HARDWARE_LEVEL_LIMITED, "Limited"));
         levels.add(new Pair<>(INFO_SUPPORTED_HARDWARE_LEVEL_LEGACY, "Legacy"));
 
+        Log.d("SL:", "Full:"+INFO_SUPPORTED_HARDWARE_LEVEL_FULL);
+        Log.d("SL:", "Limited:"+INFO_SUPPORTED_HARDWARE_LEVEL_LIMITED);
+        Log.d("SL:", "Legacy:"+INFO_SUPPORTED_HARDWARE_LEVEL_LEGACY);
+
+        result_mail += "SupportLevel:" + mylevel + "\n";
         for (Pair<Integer, String> l : levels) {
             if (l.first == mylevel) {
-                result_mail += "SupportLevel:" + l.first + ":" + l.second + "\n";
                 result += check + fpos + l.second + "</font><br style=\"clear:both;\">";
+                result_mail += "SupportLevel HR:" + l.second + "\n";
             } else {
                 result += cross + fneg + l.second + "</font><br style=\"clear:both;\">";
             }
@@ -177,14 +183,15 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        if (characteristics.get(CONTROL_AWB_LOCK_AVAILABLE)) {
-            result += check + fpos + "AWB Lock" + "</font><br style=\"clear:both;\">";
-            result_mail += "AWB Lock:" + 1 + "\n";
-        } else {
-            result_mail += "AWB Lock:" + 0 + "\n";
-            result += cross + fneg + "AWB Lock" + "</font><br style=\"clear:both;\">";
-        }
-
+        try {
+            if (characteristics.get(CONTROL_AWB_LOCK_AVAILABLE)) {
+                result += check + fpos + "AWB Lock" + "</font><br style=\"clear:both;\">";
+                result_mail += "AWB Lock:" + 1 + "\n";
+            } else {
+                result_mail += "AWB Lock:" + 0 + "\n";
+                result += cross + fneg + "AWB Lock" + "</font><br style=\"clear:both;\">";
+            }
+        }catch(Exception e){}
     }
 
     public void af() {
@@ -243,13 +250,15 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        if (characteristics.get(CONTROL_AE_LOCK_AVAILABLE)) {
-            result += check + fpos + "AE Lock" + "</font><br style=\"clear:both;\">";
-            result_mail += "AF Lock:" + 1 + "\n";
-        } else {
-            result += cross + fneg + "AE Lock" + "</font><br style=\"clear:both;\">";
-            result_mail += "AF Lock:" + 0 + "\n";
-        }
+        try {
+            if (characteristics.get(CONTROL_AE_LOCK_AVAILABLE)) {
+                result += check + fpos + "AE Lock" + "</font><br style=\"clear:both;\">";
+                result_mail += "AF Lock:" + 1 + "\n";
+            } else {
+                result += cross + fneg + "AE Lock" + "</font><br style=\"clear:both;\">";
+                result_mail += "AF Lock:" + 0 + "\n";
+            }
+        }catch(Exception e){}
 
     }
 }
