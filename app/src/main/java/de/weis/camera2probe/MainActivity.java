@@ -47,6 +47,7 @@ import static android.hardware.camera2.CameraMetadata.CONTROL_AWB_MODE_OFF;
 import static android.hardware.camera2.CameraMetadata.CONTROL_AWB_MODE_SHADE;
 import static android.hardware.camera2.CameraMetadata.CONTROL_AWB_MODE_TWILIGHT;
 import static android.hardware.camera2.CameraMetadata.CONTROL_AWB_MODE_WARM_FLUORESCENT;
+import static android.hardware.camera2.CameraMetadata.INFO_SUPPORTED_HARDWARE_LEVEL_3;
 import static android.hardware.camera2.CameraMetadata.INFO_SUPPORTED_HARDWARE_LEVEL_FULL;
 import static android.hardware.camera2.CameraMetadata.INFO_SUPPORTED_HARDWARE_LEVEL_LEGACY;
 import static android.hardware.camera2.CameraMetadata.INFO_SUPPORTED_HARDWARE_LEVEL_LIMITED;
@@ -112,6 +113,8 @@ public class MainActivity extends AppCompatActivity {
         ae();
         af();
         awb();
+        check_raw();
+
         tv.loadData(result, "text/html", "utf-8");
         btn_send.setEnabled(true);
     }
@@ -130,17 +133,47 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private static boolean contains(int[] modes, int mode) {
+        if (modes == null) {
+            return false;
+        }
+        for (int i : modes) {
+            if (i == mode) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void check_raw(){
+        result += "<br><b>RAW capture</b><br>";
+        if (contains(characteristics.get(
+                CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES),
+                CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES_RAW)){
+            result += check + fpos + "RAW capture available</font><br style=\"clear:both;\">";
+            result_mail += "RawCapture:" + 1 + "\n";
+        }else{
+            result += cross + fneg + "RAW capture NOT available</font><br style=\"clear:both;\">";
+            result_mail += "RawCapture:" + 0 + "\n";
+        }
+
+    }
+
     public void general() {
         result += "<br><b>Hardware Level Support Category</b><br>";
         Integer mylevel = characteristics.get(CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL);
         List<Pair> levels = new ArrayList<>();
+        levels.add(new Pair<>(INFO_SUPPORTED_HARDWARE_LEVEL_3, "Level_3"));
         levels.add(new Pair<>(INFO_SUPPORTED_HARDWARE_LEVEL_FULL, "Full"));
         levels.add(new Pair<>(INFO_SUPPORTED_HARDWARE_LEVEL_LIMITED, "Limited"));
         levels.add(new Pair<>(INFO_SUPPORTED_HARDWARE_LEVEL_LEGACY, "Legacy"));
 
+        /*
         Log.d("SL:", "Full:"+INFO_SUPPORTED_HARDWARE_LEVEL_FULL);
         Log.d("SL:", "Limited:"+INFO_SUPPORTED_HARDWARE_LEVEL_LIMITED);
         Log.d("SL:", "Legacy:"+INFO_SUPPORTED_HARDWARE_LEVEL_LEGACY);
+        Log.d("SL:", "Level3:"+INFO_SUPPORTED_HARDWARE_LEVEL_3);
+        */
 
         result_mail += "SupportLevel:" + mylevel + "\n";
         for (Pair<Integer, String> l : levels) {
