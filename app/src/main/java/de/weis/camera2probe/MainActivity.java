@@ -232,7 +232,7 @@ public class MainActivity extends AppCompatActivity {
         // not able to get the enum/key names from the ints,
         // so I am doing it myself
         List<Pair> ml = new ArrayList<>();
-        ml.add(new Pair<>(CONTROL_AF_MODE_OFF, "Manual focus"));
+        ml.add(new Pair<>(CONTROL_AF_MODE_OFF, "Locked focus"));
         ml.add(new Pair<>(CONTROL_AF_MODE_AUTO, "Auto focus"));
         ml.add(new Pair<>(CONTROL_AF_MODE_MACRO, "Auto focus macro"));
         ml.add(new Pair<>(CONTROL_AF_MODE_CONTINUOUS_PICTURE, "Auto focus continuous picture"));
@@ -261,7 +261,7 @@ public class MainActivity extends AppCompatActivity {
         // not able to get the enum/key names from the ints,
         // so I am doing it myself
         List<Pair> ml = new ArrayList<>();
-        ml.add(new Pair<>(CONTROL_AE_MODE_OFF, "Manual exposure"));
+        ml.add(new Pair<>(CONTROL_AE_MODE_OFF, "Locked exposure"));
         ml.add(new Pair<>(CONTROL_AE_MODE_ON, "Auto exposure"));
         ml.add(new Pair<>(CONTROL_AE_MODE_ON_ALWAYS_FLASH, "Auto exposure, always flash"));
         ml.add(new Pair<>(CONTROL_AE_MODE_ON_AUTO_FLASH, "Auto exposure, auto flash"));
