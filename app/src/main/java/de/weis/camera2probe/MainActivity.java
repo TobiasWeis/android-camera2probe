@@ -27,6 +27,8 @@ import static android.hardware.camera2.CameraCharacteristics.CONTROL_AE_LOCK_AVA
 import static android.hardware.camera2.CameraCharacteristics.CONTROL_AF_AVAILABLE_MODES;
 import static android.hardware.camera2.CameraCharacteristics.CONTROL_AWB_AVAILABLE_MODES;
 import static android.hardware.camera2.CameraCharacteristics.CONTROL_AWB_LOCK_AVAILABLE;
+import static android.hardware.camera2.CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES;
+import static android.hardware.camera2.CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES_MANUAL_SENSOR;
 import static android.hardware.camera2.CameraMetadata.CONTROL_AE_MODE_OFF;
 import static android.hardware.camera2.CameraMetadata.CONTROL_AE_MODE_ON;
 import static android.hardware.camera2.CameraMetadata.CONTROL_AE_MODE_ON_ALWAYS_FLASH;
@@ -112,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
         general();
         ae();
         af();
+        manual();
         awb();
         check_raw();
 
@@ -232,7 +235,7 @@ public class MainActivity extends AppCompatActivity {
         // not able to get the enum/key names from the ints,
         // so I am doing it myself
         List<Pair> ml = new ArrayList<>();
-        ml.add(new Pair<>(CONTROL_AF_MODE_OFF, "Manual focus"));
+        ml.add(new Pair<>(CONTROL_AF_MODE_OFF, "Locked focus"));
         ml.add(new Pair<>(CONTROL_AF_MODE_AUTO, "Auto focus"));
         ml.add(new Pair<>(CONTROL_AF_MODE_MACRO, "Auto focus macro"));
         ml.add(new Pair<>(CONTROL_AF_MODE_CONTINUOUS_PICTURE, "Auto focus continuous picture"));
@@ -261,7 +264,7 @@ public class MainActivity extends AppCompatActivity {
         // not able to get the enum/key names from the ints,
         // so I am doing it myself
         List<Pair> ml = new ArrayList<>();
-        ml.add(new Pair<>(CONTROL_AE_MODE_OFF, "Manual exposure"));
+        ml.add(new Pair<>(CONTROL_AE_MODE_OFF, "Locked exposure"));
         ml.add(new Pair<>(CONTROL_AE_MODE_ON, "Auto exposure"));
         ml.add(new Pair<>(CONTROL_AE_MODE_ON_ALWAYS_FLASH, "Auto exposure, always flash"));
         ml.add(new Pair<>(CONTROL_AE_MODE_ON_AUTO_FLASH, "Auto exposure, auto flash"));
@@ -293,5 +296,29 @@ public class MainActivity extends AppCompatActivity {
             }
         }catch(Exception e){}
 
+    }
+
+    public void manual(){
+        result += "<br><b>Other capabilities</b><br>";
+        // not able to get the enum/key names from the ints,
+        // so I am doing it myself
+        List<Pair> ml = new ArrayList<>();
+        ml.add(new Pair<>(REQUEST_AVAILABLE_CAPABILITIES_MANUAL_SENSOR, "Manual controls (focus, exposure..)"));
+
+        int[] tmp = characteristics.get(REQUEST_AVAILABLE_CAPABILITIES);
+        List<Integer> aelist = new ArrayList<Integer>();
+        for (int index = 0; index < tmp.length; index++) {
+            aelist.add(tmp[index]);
+        }
+
+        for (Pair<Integer, String> kv : ml) {
+            if (aelist.contains(kv.first)) {
+                result += check + fpos + kv.second + "</font><br style=\"clear:both;\">";
+                result_mail += kv.second + ":" + 1 + "\n";
+            } else {
+                result += cross + fneg + kv.second + "</font><br style=\"clear:both;\">";
+                result_mail += kv.second + ":" + 0 + "\n";
+            }
+        }
     }
 }
